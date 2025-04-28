@@ -1,0 +1,53 @@
+8. Apply Support Vector algorithm for classification.
+Python code
+import numpy as np 
+import matplotlib.pyplot as plt 
+from sklearn import datasets 
+from sklearn.model_selection import train_test_split 
+from sklearn.preprocessing import StandardScaler 
+from sklearn.svm import SVC 
+from sklearn.metrics import classification_report, confusion_matrix
+ # Step 1: Load dataset (Iris dataset for simplicity) 
+data = datasets.load_iris() 
+X = data.data 
+y = data.target
+ # Step 2: Preprocess the data 
+# We’ll standardize features by removing the mean and scaling to unit variance 
+scaler = StandardScaler() 
+X = scaler.fit_transform(X) 
+# Step 3: Train-test split 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+ # Step 4: Train SVM model # Using 'rbf' kernel, C=1.0, and gamma='scale' 
+svm = SVC(kernel='rbf', C=1.0, gamma='scale') 
+svm.fit(X_train, y_train) 
+# Step 5: Make predictions 
+y_pred = svm.predict(X_test) 
+# Step 6: Evaluate the model 
+print("Confusion Matrix:") 
+print(confusion_matrix(y_test, y_pred)) 
+print("\nClassification Report:") 
+print(classification_report(y_test, y_pred)) 
+# Visualize decision boundaries (only for 2 features at a time) 
+def plot_decision_boundaries(X, y, model, title="Decision Boundary"): 
+h = .02 # step size in the mesh 
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1 
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1 
+xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h)) 
+Z = model.predict(np.c_[xx.ravel(), yy.ravel()]) 
+Z = Z.reshape(xx.shape) 
+plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8) 
+plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.coolwarm, s=20, edgecolors='k') 
+plt.xlabel('Feature 1') 
+plt.ylabel('Feature 2') 
+plt.title(title) 
+plt.show() 
+# Train another SVM model for visualization (Using only first two features) 
+X_train_2D, X_test_2D = X_train[:, :2], X_test[:, :2] # Use only first two features 
+svm_2D = SVC(kernel='rbf', C=1.0, gamma='scale') 
+svm_2D.fit(X_train_2D, y_train)
+# Plotting decision boundary for the first two features 
+plot_decision_boundaries(X_train_2D, y_train, svm_2D)
+
+OutPut:
+
+
