@@ -1,0 +1,48 @@
+11.  Demonstrate Multi-layer Perceptron algorithm for a classification problem.
+Python Code for MLP Classification
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# Load the dataset
+iris = load_iris()
+X = iris.data  # Features
+y = iris.target  # Target labels (0, 1, 2)
+
+# Split dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Standardize the features (MLP performs better with normalized data)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Define and train the MLP classifier
+mlp = MLPClassifier(hidden_layer_sizes=(10, 10), activation='relu', solver='adam', max_iter=500, random_state=42)
+mlp.fit(X_train, y_train)
+
+# Make predictions
+y_pred = mlp.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+class_report = classification_report(y_test, y_pred)
+
+# Print results
+print(f"Accuracy: {accuracy:.2f}")
+print("Confusion Matrix:\n", conf_matrix)
+print("Classification Report:\n", class_report)
+
+# Plot Confusion Matrix
+plt.imshow(conf_matrix, cmap="Blues", interpolation="nearest")
+plt.colorbar()
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+plt.title("Confusion Matrix - MLP Classifier")
+plt.show()
+
