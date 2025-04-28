@@ -1,0 +1,43 @@
+7. Demonstration of the Naive Bayes Classification Algorithm using a basic example.
+Python Code for Naive Bayes Classification
+import pandas as pd
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Sample dataset
+data = {
+    'Outlook': ['Sunny', 'Sunny', 'Overcast', 'Overcast', 'Sunny', 'Overcast'],
+    'Temperature': ['Hot', 'Mild', 'Hot', 'Mild', 'Hot', 'Mild'],
+    'Play Tennis': ['No', 'No', 'Yes', 'Yes', 'No', 'Yes']
+}
+# Create a DataFrame
+df = pd.DataFrame(data)
+
+# Convert categorical data to numeric (encoding)
+df['Outlook'] = df['Outlook'].map({'Sunny': 0, 'Overcast': 1})
+df['Temperature'] = df['Temperature'].map({'Hot': 0, 'Mild': 1})
+df['Play Tennis'] = df['Play Tennis'].map({'No': 0, 'Yes': 1})
+
+# Define features (X) and target variable (y)
+X = df[['Outlook', 'Temperature']]  # Features
+y = df['Play Tennis']  # Target variable
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Initialize and train the Naive Bayes classifier
+model = GaussianNB()
+model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = model.predict(X_test)
+
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy * 100:.2f}%")
+
+# Print predictions
+print("Predictions:", y_pred)
+
+Out Put:
